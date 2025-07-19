@@ -1,98 +1,126 @@
+# Zomato Sales Analysis
 
-# ZOMATO SALES ANALYSIS 
-----------------------------------------------------------
+## 📊 Project Overview
 
-Project Overview
-----------------------------------------------------------
+This project involves a comprehensive **Exploratory Data Analysis (EDA)** and **Key Performance Indicator (KPI) calculation** on a dataset of Zomato restaurants in Bangalore, India. The primary objective is to extract actionable insights into restaurant performance, market trends, and customer behavior to help stakeholders (e.g., Zomato, restaurant owners, potential investors) make data-driven decisions.
 
-The zomato sales analysis project aims to comprehensively analyse and gain insights into the sales performance of Zomato. The primary objective of this project is to understand trends identify key factors that influences the sales ,regions with the most sales which type of restaurant are getting more sales this will provide actionable insights for business improvement
+## 🚀 Goals and Objectives
 
-**Scope:** The analysis will focus on sales data from [Start Date] to [End Date], covering [Specific regions or cities]. Key metrics to be analyzed include total sales, average order value, customer lifetime value, sales by region, sales by restaurant type, and sales trends over time.
+The analysis aims to answer several key business questions:
 
-Steps involved for  data analysis and visualization 
--------------------------------------------------------
+* What is the **distribution of restaurants** across different locations in Bangalore?
+* What are the **approximate total sales** and **average order value**?
+* Which **locations and restaurant types** generate the highest approximate sales?
+* What is the **impact of online ordering** and **table booking facilities** on restaurant ratings?
+* How do **ratings, costs, and popularity (votes)** correlate?
+* What are the **most popular and highest-rated cuisines**?
+* How does the **availability of online order/table booking** vary across different locations?
+* What is the **composition of restaurant types** within key locations?
 
+## 📂 Dataset
 
-### **Data Acquisition and Preparation**
+The dataset used is `zomato.csv`, containing information about various restaurants in Bangalore. Key columns include:
 
-**Data Source:** Kaggle dataset 
-**Data Cleaning and Preprocessing:**
-- Handle missing values (e.g., imputation or deletion)
-- Address outliers (e.g., removal or capping)
-- Convert data types as needed (e.g., strings to numerical values)
-- Standardize data formats (e.g., date and time)
+* `name`: Name of the restaurant
+* `online_order`: Whether online ordering is available (Yes/No)
+* `book_table`: Whether table booking is available (Yes/No)
+* `rate`: Aggregate rating of the restaurant (e.g., '4.1/5', 'NEW', '-')
+* `votes`: Number of votes received
+* `location`: Location of the restaurant
+* `rest_type`: Type of restaurant (e.g., Casual Dining, Cafe, Quick Bites)
+* `cuisines`: Cuisines offered by the restaurant
+* `approx_cost`: Approximate cost for two people
+* `listed_in(type)`: Type of listing (e.g., Delivery, Dine-out, Pubs and Bars)
+* `listed_in(city)`: Area/sub-city where the restaurant is listed
 
-**Data Exploration:**
-- Summary statistics
-- Data visualizations (histograms, box plots, scatter plots)
-- Correlation analysis
+## 🛠️ Methodology
 
-### **Data Analysis**
+The analysis followed a structured approach:
 
-**Key Metrics:**
-- Total sales
-- Average order value
-- Customer lifetime value
-- Sales by region
-- Sales by restaurant type
-- Sales trends over time
+### 1. Data Loading & Initial Inspection
+* Loaded the `zomato.csv` dataset into a Pandas DataFrame.
+* Performed initial checks for shape, column names, data types, and missing values.
 
+### 2. Data Preprocessing & Cleaning
+* **Column Standardization**: Renamed columns for consistency (e.g., `approx_costfortwopeople` to `approx_cost`) and standardized names to lowercase, removing special characters.
+* **Irrelevant Column Removal**: Dropped columns like `url`, `address`, `phone`, `menu_item`, `dish_liked`, and `reviews_list` as they were not directly used for the defined objectives.
+* **Handling Missing Values**:
+    * Rows with missing `rate` values were dropped.
+    * Missing `approx_cost` and `votes` were imputed using their respective median/mean to retain valuable data.
+* **Data Type Conversion**:
+    * **`rate` Column**: Cleaned by removing the '/5' suffix, converting 'NEW' and '-' entries to `NaN`, and then converting to a numeric (float) type. A crucial step involved explicitly converting to `string` (`.astype(str)`) before applying string operations to avoid errors.
+    * **`approx_cost` Column**: Cleaned by removing commas (e.g., '500,000' to '500000') and converted to a numeric (float) type.
+    * **`votes` Column**: Converted to a numeric (integer) type.
+    * **`online_order` & `book_table`**: Converted 'Yes'/'No' values to `1`/`0` for numerical analysis.
+* **Outlier Treatment**: Applied the Interquartile Range (IQR) method to cap outliers in `votes` and `approx_cost` to ensure robust statistical measures.
+* **Categorical Feature Grouping**: Grouped less frequent categories in `rest_type` (frequency < 1000), `location` (frequency < 300), and `cuisines` (frequency < 100) into an 'others' category. This significantly improved the clarity and interpretability of visualizations.
 
+### 3. Key Performance Indicator (KPI) Calculation
+* **Total Sales (Approximation)**: Summed the `approx_cost` column to estimate total potential sales.
+* **Average Order Value (AOV)**: Calculated the mean of the `approx_cost` column.
+* **Sales by Region/Restaurant Type**: Grouped data by `location` and `rest_type` to identify top contributors to approximate sales, presented in clear tabular formats.
 
-**Segmentation and Targeting:**
-- Analyze sales by customer demographics (e.g., age, gender, location)
-- Identify high-value customer segments
+### 4. Exploratory Data Analysis (EDA) & Visualizations
+A wide range of visualizations were created to understand trends and relationships:
+* **Distribution of Restaurants**: Bar plot showing the number of restaurants across different locations.
+* **Online Order & Table Booking Availability**: Pie charts illustrating the percentage of restaurants offering these facilities.
+* **Rating Trends**: Box plots showing the distribution of ratings across various restaurant types, and the impact of online order/table booking on ratings.
+* **Cost vs. Rating**: Scatter plot exploring the relationship between approximate cost and rating.
+* **Votes vs. Rating**: Scatter plot to see if higher votes correlate with higher ratings.
+* **Location-wise Service Availability**: Bar plots visualizing the count of restaurants with/without online order and table booking facilities per location.
+* **Restaurant Type Distribution by Location**: Bar plots showing the mix of restaurant types within specific areas.
+* **Cuisine Analysis**: Bar plots for the most popular cuisines (by count), average rating by cuisine, and average cost by cuisine.
+* **Overall Data Distributions**: Histograms for `rate` and `votes` to understand their overall distribution shapes.
+* **Correlation Matrix**: Heatmap displaying the correlation coefficients between all numerical variables (`rate`, `approx_cost`, `votes`, `online_order`, `book_table`).
 
-### **Visualization**
+## 📈 Key Findings & Insights
 
-**Visualization Tools:** Matplotlib, Seaborn, or other suitable tools
-**Visualization Types:** Bar charts, line charts, pie charts, scatter plots, heatmaps
-**Key Insights:**
-- Visualize sales trends over time
-- Compare sales across different regions and restaurant types
-- Identify correlations between variables
+* **Dominant Locations**: Identified Bangalore's hotspots for restaurants, indicating prime business areas.
+* **Service Adoption**: Revealed the penetration rate of online ordering and table booking among restaurants.
+* **Rating Drivers**: Explored whether offering online orders or table booking has a noticeable impact on restaurant ratings.
+* **Pricing Trends**: Understood average costs for different cuisines and restaurant types.
+* **Popular Cuisines**: Highlighted the most prevalent and highest-rated cuisines in the city.
+* **Market Opportunities**: Insights from location-wise service availability could indicate underserved areas for online delivery or table booking.
+* **Sales Performance**: Identified top-performing locations and restaurant types in terms of approximate sales.
+* **Inter-variable Relationships**: Discovered correlations between numerical features, such as the relationship between votes and ratings.
 
-### **Findings and Insights**
+## 🛠️ Technical Stack
 
-* **Summary of Key Findings:**
+* **Programming Language**: Python
+* **Libraries**:
+    * `pandas` for data manipulation and analysis.
+    * `numpy` for numerical operations.
+    * `matplotlib.pyplot` for basic plotting.
+    * `seaborn` for enhanced statistical data visualization.
+* **Environment**: Jupyter Notebook
 
- 1)  Visualization making a bar plot of number of resturant in different location  
+## ⚠️ Limitations & Future Work
 
-![WhatsApp Image 2024-10-20 at 14 48 06_799f41fe](https://github.com/user-attachments/assets/cf5adc09-ad2e-4db1-b7bd-d996a216f199)
+* **Data Granularity**: The dataset does not include unique `customer_id` or timestamped transaction data. This limits the ability to calculate advanced metrics like **Customer Lifetime Value (CLV)** and **Customer Retention Rate**, which would require more granular user behavior data.
+* **Sales Approximation**: The 'sales' figures are approximations based on `approx_cost` for two people, not actual revenue from transactions.
+* **Future Enhancements**:
+    * Integrate actual transactional data to calculate precise CLV, retention rates, and revenue per customer.
+    * Perform **sentiment analysis** on restaurant reviews (if detailed review text were available) to gauge customer sentiment more deeply.
+    * Develop a **restaurant recommendation system** based on user preferences and restaurant attributes.
 
+## 🚀 How to Run the Project
 
-Observation:- The above visualization importance is that where we can open the restutant we can decide which places have more restaurants we should not open there
+1.  **Clone the Repository:**
+    ```bash
+    git clone <repository-url>
+    cd <repository-name>
+    ```
+2.  **Install Dependencies:**
+    Make sure you have Python installed. Then install the necessary libraries:
+    ```bash
+    pip install pandas numpy matplotlib seaborn
+    ```
+3.  **Download the Dataset:**
+    Place the `zomato.csv` file in the same directory as the Jupyter Notebook.
+4.  **Run the Jupyter Notebook:**
+    ```bash
+    jupyter notebook "zomatosales analysis (1).ipynb"
+    ```
+    Open the notebook in your browser and run all cells sequentially.
 
-2.Comapring how many resturants have online order facility 
-
-![WhatsApp Image 2024-10-20 at 14 54 44_8927909d](https://github.com/user-attachments/assets/38a1f9ef-9084-4345-8fae-ee808102f5ca)
-
-3.Comapring how many resturants have book table facility 
-
-![WhatsApp Image 2024-10-20 at 14 55 17_21d2835b](https://github.com/user-attachments/assets/522b31f0-6f06-4a9e-997f-a1b5a1444402)
-
-4.Visualizing online order vs rate
-
-![WhatsApp Image 2024-10-20 at 15 36 14_27c78784](https://github.com/user-attachments/assets/8c2f07cf-17e1-4d14-937c-a8d889783d7f)
-
-
-Observation :- from here we can see the resturants having online orders are higher rated the maximum line for resturants with online order is 4.8 and where there is no online order there max rate is 4.1
-
-5.Visualizing book table with rating
-
-![WhatsApp Image 2024-10-20 at 15 37 16_f74a7a9d](https://github.com/user-attachments/assets/1d9e8cba-e9cb-44a4-8791-60f34ce1041a)
-
-Observation:- from here we can draw a conclusion the resturants having book table have a higher average rating then without book table in resturant thus from here we can tell that if we are opening a resturant we can keep book a table for dining
-
-### **Technical Implementation**
-
-**Programming Language:** Python
-**Libraries:** Pandas, NumPy, Matplotlib, Seaborn (or other relevant libraries)
-**Code Structure:**
-- Data loading and cleaning
-- Exploratory data analysis
-- Visualization
-- Findings and recommendations
-
-
-
+---
